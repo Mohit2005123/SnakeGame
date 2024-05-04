@@ -1,7 +1,7 @@
-const gridcount= 900;
+const gridcount= 225;
 let gridcontainer= document.querySelector('.gamecontainer');
 let ismoving= false;
-let snake=[{x:10, y:10}];
+let snake=[{x:5, y:5}];
 let direction= 'right';
 let gameSpeed= 200;
 let foodlocation= undefined;
@@ -27,28 +27,47 @@ for(let i=0; i<gridcount; i++){
 }
 function setFoodColour(){
     let foodposition= gridcontainer.childNodes[foodlocation];
-    foodposition.style.backgroundColor='#fc0318';
+    // foodposition.style.backgroundColor='#fc0318';
+    foodposition.innerHTML = '<span style="font-size: 2em;">🍎</span>';
 }
 function getFood(){
-    let location= Math.floor(Math.random()*gridcount);
+    let location= 0;
+    while(true){
+        location= Math.floor(Math.random()*gridcount);
+        isfound=  false;
+        for(let i=0; i<snake.length; i++){
+            if(location==(15*(snake[i].y-1)+ snake[i].x)){
+                isfound= true;
+                break;
+            }
+        }
+        if(isfound== false){
+            break;
+        }
+    }
     let position= gridcontainer.childNodes[location];
     // console.log(position);
     foodlocation= location;
-    position.style.backgroundColor='#fc0318';
+    position.innerHTML = '<span style="font-size: 2em;">🍎</span>';
+    // position.style.backgroundColor='#fc0318';
 }
 getFood();
 function draw(){
     destroy();
     for(let i=0; i<snake.length; i++){
-        if(snake[0].y==1){
-            let node= gridcontainer.childNodes[snake[i].y+ snake[i].x];
-            node.style.backgroundColor='#0303fc';
+        let node= undefined;
+        if(snake[i].y==1){
+            // let node= gridcontainer.childNodes[snake[i].y+ snake[i].x];
+             node= gridcontainer.childNodes[snake[i].x];
         }
         else{
-            let node= gridcontainer.childNodes[(30*(snake[i].y-1))+ (snake[i].x)];
-            node.style.backgroundColor='#0303fc';
+            node= gridcontainer.childNodes[(15*(snake[i].y-1))+ (snake[i].x)];
+            
         }
-
+        node.style.backgroundColor='#0303fc';
+        node.style.borderWidth='2px';
+        node.style.borderStyle='solid';
+        node.style.borderColor='black';
         // let node= gridcontainer.childNodes[(30*snake[i].y)+ snake[i].x];
         // console.log(node);
         // node.style.backgroundColor='#0303fc';
@@ -58,12 +77,15 @@ function draw(){
 function destroy(){
     for(let i=1; i<=gridcount; i++){
         if(i!=foodlocation){
+            gridcontainer.childNodes[i].innerHTML='';
             if(i%2==0){
                 gridcontainer.childNodes[i].style.backgroundColor='#77fc03';
             }
             else{
                 gridcontainer.childNodes[i].style.backgroundColor='#56fc03';
+
             }
+            gridcontainer.childNodes[i].style.border='';
         }
        
     }
@@ -94,11 +116,11 @@ function move(){
                 ()=>{
                     location.reload();
                 }
-            , 5000);
+            , 500);
         }
         snake.unshift(head);
         // Checking if the snake has eaten the food
-        if((30*(head.y-1)+ head.x)!=foodlocation){
+        if((15*(head.y-1)+ head.x)!=foodlocation){
             snake.pop();
         }
         else{
@@ -109,34 +131,42 @@ function move(){
         if(checkCollision(head)== false){
             // console.log('Collided');
             secondheading.innerText=`Score : ${score} You lost`;
-            collisionoccured= false;
+            collisionoccured= true;
             setTimeout(
                 ()=>{
                     location.reload();
                 }
-            , 5000);
+            , 500);
         }
         let currFoodLocation= gridcontainer.childNodes[foodlocation];
-        currFoodLocation.style.backgroundColor='#fc0318';
-        
+        // currFoodLocation.style.backgroundColor='#fc0318';
+        currFoodLocation.innerHTML = '<span style="font-size: 2em;">🍎</span>';
     }
 }
 function changeDirection(key){
     if(key=='ArrowUp'){
-        direction='up';
+        if(direction!='down'){
+            direction='up';
+        }
     }
     else if(key=='ArrowDown'){
-       direction='down';
+        if(direction!='up'){
+            direction='down';
+        }
     }
     else if(key=='ArrowRight'){
-       direction='right';
+       if(direction!='left'){
+        direction='right';
+       }
     }
     else if(key=='ArrowLeft'){
-        direction='left';
+        if(direction!='right'){
+            direction='left';
+        }
     }
 }
 function checkBlockCollision(head){
-    if(head.x==-1 || head.y==-1 || head.x== 31 || head.y==31){
+    if(head.x<0 || head.y<0 || head.x>15 || head.y>15){
         return false;
     }
 }
@@ -157,11 +187,14 @@ let gameFunction= ()=>{
    draw();
     }
 }
-
+let interval= ()=>{
+    setInterval(gameFunction, gameSpeed);
+}
 document.addEventListener('keydown', (event)=>{
     if(event.key==' '  && isgamestarted== false && collisionoccured== false){
         isgamestarted= true;
         secondheading.innerText=`Score : ${score}`;
-        let interval= setInterval(gameFunction, gameSpeed);
+        // let interval= setInterval(gameFunction, gameSpeed);
+        interval();
     }
 })

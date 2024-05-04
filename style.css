@@ -1,7 +1,7 @@
 .gamecontainer{
     display: grid;
-    grid-template-columns: repeat(30, 20px); /* Change 20 to the number of columns you want */
-    grid-template-rows: repeat(30, 20px); /* Change 20 to the number of rows you want */
+    grid-template-columns: repeat(15, 40px); /* Change 20 to the number of columns you want */
+    grid-template-rows: repeat(15, 40px); /* Change 20 to the number of rows you want */
     border: 5px solid #333;
     height: 600px;
     width: 600px;
@@ -20,5 +20,5 @@ body{
     background-color: #77fc03;
 }
 .odd{
-    background-color: #56fc03;
+    background-color: #03fc2d;
 }
