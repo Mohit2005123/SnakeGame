@@ -9,6 +9,7 @@ let isgamestarted= false;
 let secondheading= document.querySelector('h2');
 let collisionoccured= false;
 let score=0;
+let interval;
 // 1 means right
 // -1 means left
 // 2 means up
@@ -127,6 +128,9 @@ function move(){
             score++;
             secondheading.innerText=`Score : ${score}`;
             getFood();
+            increaseSpeed();
+            clearInterval(interval);
+            interval= setInterval(gameFunction, gameSpeed);
         }
         if(checkCollision(head)== false){
             // console.log('Collided');
@@ -143,6 +147,18 @@ function move(){
         currFoodLocation.innerHTML = '<span style="font-size: 2em;">🍎</span>';
     }
 }
+function increaseSpeed() {
+    //   console.log(gameSpeed);
+    if (gameSpeed > 150) {
+      gameSpeed -= 5;
+    } else if (gameSpeed > 100) {
+      gameSpeed -= 3;
+    } else if (gameSpeed > 50) {
+      gameSpeed -= 2;
+    } else if (gameSpeed > 25) {
+      gameSpeed -= 1;
+    }
+  }
 function changeDirection(key){
     if(key=='ArrowUp'){
         if(direction!='down'){
@@ -180,6 +196,7 @@ function checkCollision(head){
 }
 
 let gameFunction= ()=>{
+    console.log(gameSpeed);
     setFoodColour();
     // draw();
     if(collisionoccured== false){
@@ -187,14 +204,15 @@ let gameFunction= ()=>{
    draw();
     }
 }
-let interval= ()=>{
-    setInterval(gameFunction, gameSpeed);
-}
+// let interval= ()=>{
+//     setInterval(gameFunction, gameSpeed);
+// }
 document.addEventListener('keydown', (event)=>{
     if(event.key==' '  && isgamestarted== false && collisionoccured== false){
         isgamestarted= true;
         secondheading.innerText=`Score : ${score}`;
         // let interval= setInterval(gameFunction, gameSpeed);
-        interval();
+        // interval();
+         interval= setInterval(gameFunction, gameSpeed);
     }
 })
