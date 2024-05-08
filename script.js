@@ -31,7 +31,7 @@ function setFoodColour(){
     // foodposition.style.backgroundColor='#fc0318';
     foodposition.innerHTML = '<span style="font-size: 2em;">🍎</span>';
 }
-function getFood(){
+ async function getFood(){
     let location= 0;
     while(true){
         location= Math.floor(Math.random()*gridcount);
@@ -52,7 +52,7 @@ function getFood(){
     position.innerHTML = '<span style="font-size: 2em;">🍎</span>';
     // position.style.backgroundColor='#fc0318';
 }
-getFood();
+  getFood();
 function draw(){
     destroy();
     for(let i=0; i<snake.length; i++){
@@ -91,7 +91,7 @@ function destroy(){
        
     }
 }
-function move(){
+async function move(){
     if(collisionoccured== false){
         const head= { ... snake[0]};
         document.addEventListener('keydown', (event)=>{
@@ -127,10 +127,10 @@ function move(){
         else{
             score++;
             secondheading.innerText=`Score : ${score}`;
-            getFood();
-            increaseSpeed();
-            clearInterval(interval);
-            interval= setInterval(gameFunction, gameSpeed);
+           await  getFood();
+           await  increaseSpeed();
+           await  clearInterval(interval);
+             interval=  await setInterval(gameFunction, gameSpeed);
         }
         if(checkCollision(head)== false){
             // console.log('Collided');
@@ -195,13 +195,13 @@ function checkCollision(head){
     return true;
 }
 
-let gameFunction= ()=>{
+let gameFunction=async ()=>{
     console.log(gameSpeed);
-    setFoodColour();
+     await setFoodColour();
     // draw();
     if(collisionoccured== false){
-        move();
-   draw();
+     await   move();
+   await draw();
     }
 }
 // let interval= ()=>{
