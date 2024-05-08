@@ -34,7 +34,7 @@ function setFoodColour(){
  async function getFood(){
     let location= 0;
     while(true){
-        location= Math.floor(Math.random()*gridcount);
+        location= Math.floor(Math.random()*gridcount)+1;
         isfound=  false;
         for(let i=0; i<snake.length; i++){
             if(location==(15*(snake[i].y-1)+ snake[i].x)){
@@ -47,11 +47,12 @@ function setFoodColour(){
         }
     }
     let position= gridcontainer.childNodes[location];
-    // console.log(position);
+    console.log(position);
     foodlocation= location;
     position.innerHTML = '<span style="font-size: 2em;">🍎</span>';
     // position.style.backgroundColor='#fc0318';
 }
+console.log(gridcontainer.childNodes[0]);
   getFood();
 function draw(){
     destroy();
@@ -111,7 +112,7 @@ async function move(){
         }
         if(checkBlockCollision(head)== false){
             // console.log('Collided');
-            secondheading.innerText=`Score : ${score} You lost`;
+            secondheading.innerText=`Score : ${score} You lost`; 
             collisionoccured= true;
             setTimeout(
                 ()=>{
@@ -130,7 +131,7 @@ async function move(){
            await  getFood();
            await  increaseSpeed();
            await  clearInterval(interval);
-             interval=  await setInterval(gameFunction, gameSpeed);
+             interval=  setInterval(gameFunction, gameSpeed);
         }
         if(checkCollision(head)== false){
             // console.log('Collided');
@@ -196,7 +197,7 @@ function checkCollision(head){
 }
 
 let gameFunction=async ()=>{
-    console.log(gameSpeed);
+    // console.log(gameSpeed);
      await setFoodColour();
     // draw();
     if(collisionoccured== false){
